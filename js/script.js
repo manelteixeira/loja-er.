@@ -82,7 +82,7 @@ function renderProducts() {
 }
 
 async function initCatalog() {
-  generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER do DCER Baiano.");
+  generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Casa do Embaixador do DCER Baiano.");
   const { data, error } = await supabase.from("products").select("id,name,category,price,description,image_url,available,sort_order").eq("available", true).order("sort_order").order("name");
   if (error) {
     filterStatus.textContent = "Não foi possível carregar os produtos. Tente novamente mais tarde.";
