@@ -1,48 +1,12 @@
+import { supabase } from "./supabase.js";
+
 const WHATSAPP_NUMBER = "5571983982533";
-
-const products = [
-  { name: "Panfleto Para Ser Embaixador", category: "Manuais", price: "R$ 0,60 / unidade" },
-  { name: "Embaixador Escudeiro", category: "Manuais", price: "R$ 10,00" },
-  { name: "Embaixador Arauto", category: "Manuais", price: "R$ 11,00" },
-  { name: "Embaixador Sênior", category: "Manuais", price: "R$ 12,00" },
-
-  { name: "Revista O Embaixador", category: "Revistas e livros", price: "R$ 14,00" },
-  { name: "Revista Homem Batista", category: "Revistas e livros", price: "R$ 15,00" },
-  { name: "Livro Sempre Embaixador", category: "Revistas e livros", price: "R$ 26,00" },
-  { name: "Livro Vivendo o Compromisso", category: "Revistas e livros", price: "R$ 20,00" },
-  { name: "Livro Vivendo o Cinco Ideais", category: "Revistas e livros", price: "R$ 22,00" },
-
-  { name: "Bíblia ER Letra Normal - NAA", category: "Bíblias", price: "R$ 60,00" },
-  { name: "Bíblia ER Letra Grande - NAA", category: "Bíblias", price: "R$ 80,00" },
-
-  { name: "Bandeira da Bahia", category: "Bandeiras", price: "R$ 130,00" },
-  { name: "Bandeira do Brasil", category: "Bandeiras", price: "R$ 130,00" },
-  { name: "Bandeira Cristã Sublimada", category: "Bandeiras", price: "R$ 190,00" },
-  { name: "Bandeira Cristã Bordada", category: "Bandeiras", price: "R$ 230,00" },
-  { name: "Bandeira ER Sublimada", category: "Bandeiras", price: "R$ 190,00" },
-  { name: "Bandeira ER Bordada", category: "Bandeiras", price: "R$ 230,00" },
-  { name: "Bandeira GAM", category: "Bandeiras", price: "R$ 190,00" },
-  { name: "Bandeira SHMB", category: "Bandeiras", price: "R$ 190,00" },
-
-  { name: "Pulseira silicone ER e MR", category: "Brindes, vestuário e acessórios", price: "R$ 10,00" },
-  { name: "Botton Metal Postos/Pastor", category: "Brindes, vestuário e acessórios", price: "R$ 14,00" },
-  { name: "Botton Metal Envelhecido", category: "Brindes, vestuário e acessórios", price: "R$ 11,00" },
-  { name: "Botton Redondo ER/MR/Postos", category: "Brindes, vestuário e acessórios", price: "R$ 5,00" },
-  { name: "Imã de geladeira", category: "Brindes, vestuário e acessórios", price: "R$ 5,00" },
-  { name: "Bonés ER", category: "Brindes, vestuário e acessórios", price: "R$ 35,00" },
-  { name: "Camisa ER Somos Embaixadores por Cristo", category: "Brindes, vestuário e acessórios", price: "R$ 60,00" },
-  { name: "Camisa ER Pólo", category: "Brindes, vestuário e acessórios", price: "R$ 90,00" },
-  { name: "Camisa Conselheiro (a)", category: "Brindes, vestuário e acessórios", price: "R$ 40,00" },
-  { name: "Camisa ER diversas estampas", category: "Brindes, vestuário e acessórios", price: "R$ 40,00" },
-  { name: "Camisa UMHBBa Gola Careca", category: "Brindes, vestuário e acessórios", price: "R$ 35,00" },
-  { name: "Camisa UMHBBa Pólo", category: "Brindes, vestuário e acessórios", price: "R$ 60,00" }
-];
-
 const productGrid = document.querySelector("#product-grid");
 const categoryFilters = document.querySelector("#category-filters");
 const filterStatus = document.querySelector("#filter-status");
-let activeCategory = "Todos";
 const generalWhatsapp = document.querySelector("#general-whatsapp");
+let products = [];
+let activeCategory = "Todos";
 
 function createWhatsappLink(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -51,32 +15,33 @@ function createWhatsappLink(message) {
 function createProductCard(product) {
   const card = document.createElement("article");
   card.className = "product-card";
-
+  if (product.image_url) {
+    const image = document.createElement("img");
+    image.className = "product-image";
+    image.src = product.image_url;
+    image.alt = product.name;
+    image.loading = "lazy";
+    card.append(image);
+  }
   const info = document.createElement("div");
   info.className = "product-info";
-
   const category = document.createElement("span");
   category.className = "product-category";
   category.textContent = product.category;
-
   const name = document.createElement("h3");
   name.textContent = product.name;
-
   const price = document.createElement("p");
   price.className = "product-price";
   price.textContent = product.price;
-
   const stock = document.createElement("p");
   stock.className = "product-stock";
-  stock.textContent = "Estoque: a confirmar";
-
+  stock.textContent = product.available ? "Disponibilidade a confirmar" : "Indisponível no momento";
   const button = document.createElement("a");
   button.className = "product-button";
   button.href = createWhatsappLink(`Olá! Tenho interesse no produto: ${product.name} (${product.price}). Poderia confirmar a disponibilidade?`);
   button.target = "_blank";
   button.rel = "noopener noreferrer";
   button.textContent = "Consultar pelo WhatsApp ↗";
-
   info.append(category, name, price, stock, button);
   card.append(info);
   return card;
@@ -85,7 +50,6 @@ function createProductCard(product) {
 function renderCategoryFilters() {
   categoryFilters.replaceChildren();
   const categories = ["Todos", ...new Set(products.map((product) => product.category))];
-
   categories.forEach((categoryName) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -93,32 +57,41 @@ function renderCategoryFilters() {
     button.textContent = categoryName;
     button.setAttribute("aria-pressed", String(categoryName === activeCategory));
     if (categoryName === activeCategory) button.classList.add("is-active");
-
     button.addEventListener("click", () => {
       activeCategory = categoryName;
       renderCategoryFilters();
       renderProducts();
     });
-
     categoryFilters.append(button);
   });
 }
 
 function renderProducts() {
   productGrid.replaceChildren();
-  const visibleProducts = activeCategory === "Todos"
-    ? products
-    : products.filter((product) => product.category === activeCategory);
-
-  visibleProducts.forEach((product) => {
-    productGrid.append(createProductCard(product));
-  });
-
-  filterStatus.textContent = activeCategory === "Todos"
-    ? `${visibleProducts.length} produtos`
-    : `${visibleProducts.length} produtos em ${activeCategory}`;
+  const visible = products.filter((product) =>
+    product.available && (activeCategory === "Todos" || product.category === activeCategory)
+  );
+  if (!visible.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty-products";
+    empty.textContent = "Nenhum produto encontrado nesta categoria.";
+    productGrid.append(empty);
+  } else {
+    visible.forEach((product) => productGrid.append(createProductCard(product)));
+  }
+  filterStatus.textContent = `${visible.length} produtos`;
 }
 
-generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER do DCER Baiano.");
-renderCategoryFilters();
-renderProducts();
+async function initCatalog() {
+  generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER do DCER Baiano.");
+  const { data, error } = await supabase.from("products").select("id,name,category,price,description,image_url,available,sort_order").eq("available", true).order("sort_order").order("name");
+  if (error) {
+    filterStatus.textContent = "Não foi possível carregar os produtos. Tente novamente mais tarde.";
+    return;
+  }
+  products = data || [];
+  renderCategoryFilters();
+  renderProducts();
+}
+
+initCatalog();
