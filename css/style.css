@@ -18,7 +18,7 @@ body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(
 a { color: inherit; text-decoration: none; }
 .site-header { min-height: 82px; padding: 0 7%; display: flex; align-items: center; justify-content: space-between; background: var(--white); }
 .brand { display: flex; align-items: center; gap: 12px; }
-.brand-mark { width: 43px; height: 43px; display: grid; place-items: center; background: var(--navy); color: var(--gold); font: 800 15px var(--font-display); border: 2px solid var(--gold); }
+.brand-logo { width: 48px; height: 48px; object-fit: contain; flex: 0 0 auto; }
 .brand-copy { display: grid; gap: 3px; }
 .brand-copy strong { color: var(--navy); font: 800 13px var(--font-display); letter-spacing: 1.5px; }
 .brand-copy small { color: var(--muted); font-size: 11px; }
@@ -83,7 +83,7 @@ a { color: inherit; text-decoration: none; }
 }
 @media (max-width: 760px) {
   .site-header { min-height: 72px; padding: 0 5%; }
-  .brand-mark { width: 39px; height: 39px; }
+  .brand-logo { width: 42px; height: 42px; }
   .brand-copy small { font-size: 10px; }
   .hero { min-height: 440px; padding: 65px 7%; }
   .hero-content { width: 100%; max-width: 100%; }
