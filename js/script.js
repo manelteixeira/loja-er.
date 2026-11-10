@@ -1,5 +1,5 @@
 // Número temporário para testes. Confirmar com o responsável antes da publicação.
-const WHATSAPP_NUMBER = "5571993766226";
+const WHATSAPP_NUMBER = "557193766226";
 
 // Produtos confirmados até agora. As imagens são provisórias até adicionarmos as fotos originais.
 const products = [
