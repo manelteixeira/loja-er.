@@ -1,35 +1,60 @@
-// Número temporário para testes. Confirmar com o responsável antes da publicação.
-const WHATSAPP_NUMBER = "557193766226";
+const WHATSAPP_NUMBER = "5571985032075";
 
-// Produtos confirmados até agora. As imagens são provisórias até adicionarmos as fotos originais.
 const products = [
-  {
-    name: "Botons — Insígnias de postos",
-    price: "R$ 5,00 cada",
-    image: "assets/img/boton-placeholder.svg"
-  },
-  {
-    name: "Pulseira personalizada",
-    price: "R$ 15,00",
-    image: "assets/img/pulseira-placeholder.svg"
-  }
+  { name: "Panfleto Para Ser Embaixador", category: "Manuais", price: "R$ 0,60 / unidade" },
+  { name: "Embaixador Escudeiro", category: "Manuais", price: "R$ 10,00" },
+  { name: "Embaixador Arauto", category: "Manuais", price: "R$ 11,00" },
+  { name: "Embaixador Sênior", category: "Manuais", price: "R$ 12,00" },
+
+  { name: "Revista O Embaixador", category: "Revistas e livros", price: "R$ 14,00" },
+  { name: "Revista Homem Batista", category: "Revistas e livros", price: "R$ 15,00" },
+  { name: "Livro Sempre Embaixador", category: "Revistas e livros", price: "R$ 26,00" },
+  { name: "Livro Vivendo o Compromisso", category: "Revistas e livros", price: "R$ 20,00" },
+  { name: "Livro Vivendo o Cinco Ideais", category: "Revistas e livros", price: "R$ 22,00" },
+
+  { name: "Bíblia ER Letra Normal - NAA", category: "Bíblias", price: "R$ 60,00" },
+  { name: "Bíblia ER Letra Grande - NAA", category: "Bíblias", price: "R$ 80,00" },
+
+  { name: "Bandeira da Bahia", category: "Bandeiras", price: "R$ 130,00" },
+  { name: "Bandeira do Brasil", category: "Bandeiras", price: "R$ 130,00" },
+  { name: "Bandeira Cristã Sublimada", category: "Bandeiras", price: "R$ 190,00" },
+  { name: "Bandeira Cristã Bordada", category: "Bandeiras", price: "R$ 230,00" },
+  { name: "Bandeira ER Sublimada", category: "Bandeiras", price: "R$ 190,00" },
+  { name: "Bandeira ER Bordada", category: "Bandeiras", price: "R$ 230,00" },
+  { name: "Bandeira GAM", category: "Bandeiras", price: "R$ 190,00" },
+  { name: "Bandeira SHMB", category: "Bandeiras", price: "R$ 190,00" },
+
+  { name: "Pulseira silicone ER e MR", category: "Brindes, vestuário e acessórios", price: "R$ 10,00" },
+  { name: "Botton Metal Postos/Pastor", category: "Brindes, vestuário e acessórios", price: "R$ 14,00" },
+  { name: "Botton Metal Envelhecido", category: "Brindes, vestuário e acessórios", price: "R$ 11,00" },
+  { name: "Botton Redondo ER/MR/Postos", category: "Brindes, vestuário e acessórios", price: "R$ 5,00" },
+  { name: "Imã de geladeira", category: "Brindes, vestuário e acessórios", price: "R$ 5,00" },
+  { name: "Bonés ER", category: "Brindes, vestuário e acessórios", price: "R$ 35,00" },
+  { name: "Camisa ER Somos Embaixadores por Cristo", category: "Brindes, vestuário e acessórios", price: "R$ 60,00" },
+  { name: "Camisa ER Pólo", category: "Brindes, vestuário e acessórios", price: "R$ 90,00" },
+  { name: "Camisa Conselheiro (a)", category: "Brindes, vestuário e acessórios", price: "R$ 40,00" },
+  { name: "Camisa ER diversas estampas", category: "Brindes, vestuário e acessórios", price: "R$ 40,00" },
+  { name: "Camisa UMHBBa Gola Careca", category: "Brindes, vestuário e acessórios", price: "R$ 35,00" },
+  { name: "Camisa UMHBBa Pólo", category: "Brindes, vestuário e acessórios", price: "R$ 60,00" }
 ];
 
 const productGrid = document.querySelector("#product-grid");
 const generalWhatsapp = document.querySelector("#general-whatsapp");
 
+function createWhatsappLink(message) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
 function createProductCard(product) {
   const card = document.createElement("article");
   card.className = "product-card";
 
-  const image = document.createElement("img");
-  image.className = "product-image";
-  image.src = product.image;
-  image.alt = product.name;
-  image.loading = "lazy";
-
   const info = document.createElement("div");
   info.className = "product-info";
+
+  const category = document.createElement("span");
+  category.className = "product-category";
+  category.textContent = product.category;
 
   const name = document.createElement("h3");
   name.textContent = product.name;
@@ -38,20 +63,20 @@ function createProductCard(product) {
   price.className = "product-price";
   price.textContent = product.price;
 
+  const stock = document.createElement("p");
+  stock.className = "product-stock";
+  stock.textContent = "Estoque: a confirmar";
+
   const button = document.createElement("a");
   button.className = "product-button";
-  button.href = createWhatsappLink(`Olá! Tenho interesse em ${product.name}.`);
+  button.href = createWhatsappLink(`Olá! Tenho interesse no produto: ${product.name} (${product.price}). Poderia confirmar a disponibilidade?`);
   button.target = "_blank";
   button.rel = "noopener noreferrer";
-  button.textContent = "Pedir pelo WhatsApp ↗";
+  button.textContent = "Consultar pelo WhatsApp ↗";
 
-  info.append(name, price, button);
-  card.append(image, info);
+  info.append(category, name, price, stock, button);
+  card.append(info);
   return card;
-}
-
-function createWhatsappLink(message) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 function renderProducts() {
@@ -60,5 +85,5 @@ function renderProducts() {
   });
 }
 
-generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER.");
+generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER do DCER Baiano.");
 renderProducts();
