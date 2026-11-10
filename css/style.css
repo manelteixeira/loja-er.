@@ -174,3 +174,6 @@ a { color: inherit; text-decoration: none; }
   .admin-product-details { flex-basis: calc(100% - 75px); }
   .admin-product-actions { width: 100%; padding-left: 72px; }
 }
+
+/* Corrige o atributo hidden da prévia da imagem */
+.image-preview[hidden] { display: none; }
