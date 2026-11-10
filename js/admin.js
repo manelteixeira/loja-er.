@@ -205,6 +205,12 @@ function editProduct(product) {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  const willBeHidden = !document.querySelector("#product-available").checked;
+  if (willBeHidden && !window.confirm("Este produto ficará oculto na vitrine. Deseja continuar?")) {
+    return;
+  }
+
   const save = document.querySelector("#save-product");
   save.disabled = true;
   message(adminMessage, "Salvando produto...");
