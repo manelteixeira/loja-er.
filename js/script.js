@@ -9,7 +9,7 @@ let products = [];
 let activeCategory = "Todos";
 
 function createWhatsappLink(message) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  return `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
 }
 
 function createProductCard(product) {
