@@ -39,7 +39,8 @@ function createProductCard(product) {
   const button = document.createElement("a");
   button.className = "product-button";
   button.href = createWhatsappLink(`Olá! Tenho interesse no produto: ${product.name} (${product.price}). Poderia confirmar a disponibilidade?`);
-  button.target = "_self";
+  button.target = "_blank";
+  button.rel = "noopener noreferrer";
   button.textContent = "Consultar pelo WhatsApp ↗";
   info.append(category, name, price, stock, button);
   card.append(info);
