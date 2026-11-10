@@ -3,6 +3,8 @@ import { supabase } from "./supabase.js";
 const ADMIN_EMAIL = "dcerbaiano@gmail.com";
 const form = document.querySelector("#product-form");
 const list = document.querySelector("#admin-products");
+const categoryFilters = document.querySelector("#admin-category-filters");
+const filterStatus = document.querySelector("#admin-filter-status");
 const loginForm = document.querySelector("#login-form");
 const loginPanel = document.querySelector("#login-panel");
 const dashboard = document.querySelector("#dashboard");
@@ -13,6 +15,8 @@ const imagePreview = document.querySelector("#image-preview");
 const saveButton = document.querySelector("#save-product");
 let editingId = null;
 let currentImageUrl = null;
+let allProducts = [];
+let activeCategory = "Todas";
 
 function message(target, text, error = false) {
   target.textContent = text;
@@ -104,16 +108,48 @@ async function uploadImage(file) {
 
 async function loadProducts() {
   list.replaceChildren();
+  categoryFilters.replaceChildren();
   const { data, error } = await supabase.from("products").select("*").order("sort_order").order("name");
   if (error) {
     message(adminMessage, "Erro ao carregar os produtos. Atualize a página.", true);
     return;
   }
-  if (!data.length) {
-    list.textContent = "Nenhum produto cadastrado.";
+  allProducts = data || [];
+  const categories = ["Todas", ...new Set(allProducts.map((product) => product.category).filter(Boolean).sort((a, b) => a.localeCompare(b, "pt-BR")))];
+  if (!categories.includes(activeCategory)) activeCategory = "Todas";
+
+  categories.forEach((category) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "category-filter";
+    button.textContent = category;
+    button.classList.toggle("is-active", category === activeCategory);
+    button.setAttribute("aria-pressed", String(category === activeCategory));
+    button.addEventListener("click", () => {
+      activeCategory = category;
+      renderProducts();
+    });
+    categoryFilters.append(button);
+  });
+  renderProducts();
+}
+
+function renderProducts() {
+  list.replaceChildren();
+  const filteredProducts = activeCategory === "Todas"
+    ? allProducts
+    : allProducts.filter((product) => product.category === activeCategory);
+
+  filterStatus.textContent = activeCategory === "Todas"
+    ? `Exibindo ${filteredProducts.length} produto(s).`
+    : `Exibindo ${filteredProducts.length} de ${allProducts.length} produto(s) em "${activeCategory}".`;
+
+  if (!filteredProducts.length) {
+    list.textContent = "Nenhum produto encontrado nesta categoria.";
     return;
   }
-  data.forEach((product) => {
+
+  filteredProducts.forEach((product) => {
     const item = document.createElement("article");
     item.className = "admin-product";
     if (product.image_url) {
@@ -146,7 +182,6 @@ async function loadProducts() {
     list.append(item);
   });
 }
-
 function editProduct(product) {
   editingId = product.id;
   currentImageUrl = product.image_url;
