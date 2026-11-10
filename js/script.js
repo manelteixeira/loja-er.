@@ -39,6 +39,9 @@ const products = [
 ];
 
 const productGrid = document.querySelector("#product-grid");
+const categoryFilters = document.querySelector("#category-filters");
+const filterStatus = document.querySelector("#filter-status");
+let activeCategory = "Todos";
 const generalWhatsapp = document.querySelector("#general-whatsapp");
 
 function createWhatsappLink(message) {
@@ -79,10 +82,41 @@ function createProductCard(product) {
   return card;
 }
 
+function renderCategoryFilters() {
+  const categories = ["Todos", ...new Set(products.map((product) => product.category))];
+
+  categories.forEach((categoryName) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "category-filter";
+    button.textContent = categoryName;
+    button.setAttribute("aria-pressed", String(categoryName === activeCategory));
+    if (categoryName === activeCategory) button.classList.add("is-active");
+
+    button.addEventListener("click", () => {
+      activeCategory = categoryName;
+      renderCategoryFilters();
+      renderCategoryFilters();
+renderProducts();
+    });
+
+    categoryFilters.append(button);
+  });
+}
+
 function renderProducts() {
-  products.forEach((product) => {
+  productGrid.replaceChildren();
+  const visibleProducts = activeCategory === "Todos"
+    ? products
+    : products.filter((product) => product.category === activeCategory);
+
+  visibleProducts.forEach((product) => {
     productGrid.append(createProductCard(product));
   });
+
+  filterStatus.textContent = activeCategory === "Todos"
+    ? `${visibleProducts.length} produtos`
+    : `${visibleProducts.length} produtos em ${activeCategory}`;
 }
 
 generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER do DCER Baiano.");
