@@ -1,0 +1,94 @@
+:root {
+  --navy: #0b1d3a;
+  --navy-light: #142d52;
+  --gold: #d9ad55;
+  --gold-light: #f0d69e;
+  --paper: #f7f6f2;
+  --white: #ffffff;
+  --ink: #172238;
+  --muted: #687386;
+  --border: #e6e3dc;
+  --font-body: "DM Sans", sans-serif;
+  --font-display: "Montserrat", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); }
+a { color: inherit; text-decoration: none; }
+.site-header { min-height: 82px; padding: 0 7%; display: flex; align-items: center; justify-content: space-between; background: var(--white); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark { width: 43px; height: 43px; display: grid; place-items: center; background: var(--navy); color: var(--gold); font: 800 15px var(--font-display); border: 2px solid var(--gold); }
+.brand-copy { display: grid; gap: 3px; }
+.brand-copy strong { color: var(--navy); font: 800 13px var(--font-display); letter-spacing: 1.5px; }
+.brand-copy small { color: var(--muted); font-size: 11px; }
+.header-link { color: var(--navy); font-size: 13px; font-weight: 700; }
+.header-link span { color: #b78631; margin-left: 5px; }
+.hero { min-height: 470px; padding: 78px 10%; position: relative; overflow: hidden; display: flex; align-items: center; background: var(--navy); color: var(--white); }
+.hero-content { position: relative; z-index: 1; max-width: 620px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 2px; }
+.eyebrow-line { width: 25px; height: 1px; background: var(--gold); }
+.hero h1 { margin: 22px 0 17px; font: 800 clamp(36px, 5vw, 58px)/1.12 var(--font-display); letter-spacing: -2px; }
+.hero h1 span { color: var(--gold-light); }
+.hero-content > p { max-width: 430px; color: #c6cfdd; font-size: 15px; line-height: 1.7; }
+.primary-button, .secondary-button { min-height: 48px; padding: 0 22px; display: inline-flex; align-items: center; justify-content: center; gap: 20px; font-size: 12px; font-weight: 700; transition: transform .2s, background .2s; }
+.primary-button { margin-top: 18px; background: var(--gold); color: var(--navy); }
+.primary-button:hover, .secondary-button:hover { transform: translateY(-2px); }
+.hero-decoration { position: absolute; width: 380px; height: 380px; right: 10%; top: 50%; transform: translateY(-50%); display: grid; place-items: center; border: 1px solid rgba(217,173,85,.25); border-radius: 50%; }
+.decoration-ring { position: absolute; inset: 28px; border: 1px solid rgba(217,173,85,.45); border-radius: 50%; }
+.decoration-text { color: rgba(240,214,158,.8); text-align: center; font: 800 24px/1.5 var(--font-display); letter-spacing: 5px; }
+.decoration-star { position: absolute; right: 55px; top: 50px; color: var(--gold); font-size: 34px; }
+.products-section { max-width: 1180px; margin: auto; padding: 86px 7% 100px; }
+.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 35px; margin-bottom: 35px; }
+.section-heading h2, .contact-strip h2 { margin: 13px 0 0; color: var(--navy); font: 800 clamp(27px, 3.5vw, 38px)/1.2 var(--font-display); letter-spacing: -1px; }
+.section-heading h2 span { color: #b78631; }
+.section-heading > p { max-width: 330px; margin: 0 0 3px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.empty-state { grid-column: 1 / -1; padding: 55px 20px; text-align: center; background: var(--white); border: 1px solid var(--border); }
+.empty-icon { width: 52px; height: 52px; margin: 0 auto 15px; display: grid; place-items: center; border-radius: 50%; background: #f5eddd; color: #a77b2c; font-size: 23px; }
+.empty-state h3 { margin: 0 0 8px; color: var(--navy); font: 700 17px var(--font-display); }
+.empty-state p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.product-card { overflow: hidden; background: var(--white); border: 1px solid var(--border); }
+.product-image { width: 100%; aspect-ratio: 4 / 3; display: block; object-fit: cover; background: #ece9e1; }
+.product-info { padding: 19px; }
+.product-info h3 { margin: 0 0 7px; color: var(--navy); font: 700 16px var(--font-display); }
+.product-price { margin: 0 0 16px; color: #9a702b; font-size: 16px; font-weight: 700; }
+.product-button { width: 100%; min-height: 43px; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--navy); color: var(--white); font-size: 12px; font-weight: 700; }
+.product-button:hover { background: var(--navy-light); }
+.contact-strip { padding: 48px 10%; display: flex; justify-content: space-between; align-items: center; gap: 25px; background: #eee9dd; }
+.contact-strip h2 { font-size: 27px; }
+.contact-strip p { margin: 9px 0 0; color: var(--muted); font-size: 13px; }
+.secondary-button { flex-shrink: 0; background: var(--navy); color: var(--white); }
+.site-footer { min-height: 105px; padding: 25px 7%; display: flex; align-items: center; justify-content: space-between; gap: 15px; background: #07152b; color: #c6cfdd; }
+.footer-brand { color: var(--white); font: 800 14px var(--font-display); letter-spacing: 1px; }
+.footer-brand span { color: var(--gold); }
+.site-footer p, .site-footer small { margin: 0; font-size: 11px; }
+
+@media (max-width: 760px) {
+  .site-header { min-height: 72px; padding: 0 5%; }
+  .brand-mark { width: 39px; height: 39px; }
+  .brand-copy small { font-size: 10px; }
+  .hero { min-height: 440px; padding: 65px 7%; }
+  .hero-decoration { width: 230px; height: 230px; right: -85px; top: 75%; opacity: .45; }
+  .decoration-ring { inset: 17px; }
+  .decoration-text { font-size: 15px; }
+  .decoration-star { right: 35px; top: 30px; font-size: 24px; }
+  .hero h1 { letter-spacing: -1.5px; }
+  .products-section { padding: 65px 6% 70px; }
+  .section-heading { display: block; }
+  .section-heading > p { margin-top: 15px; }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+  .product-info { padding: 13px; }
+  .product-info h3 { font-size: 13px; }
+  .product-price { font-size: 14px; }
+  .product-button { min-height: 40px; font-size: 10px; }
+  .contact-strip { padding: 38px 7%; align-items: flex-start; flex-direction: column; }
+  .site-footer { padding: 25px 6%; flex-wrap: wrap; }
+  .site-footer p { order: 3; width: 100%; }
+}
+@media (max-width: 390px) {
+  .header-link { font-size: 11px; }
+  .brand-copy strong { font-size: 11px; }
+  .brand-copy small { font-size: 9px; }
+  .product-grid { grid-template-columns: 1fr; }
+}
