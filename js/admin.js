@@ -115,6 +115,7 @@ async function loadProducts() {
     return;
   }
   allProducts = data || [];
+  categoryFilters.replaceChildren();
   const categories = ["Todas", ...new Set(allProducts.map((product) => product.category).filter(Boolean).sort((a, b) => a.localeCompare(b, "pt-BR")))];
   if (!categories.includes(activeCategory)) activeCategory = "Todas";
 
