@@ -83,6 +83,7 @@ function createProductCard(product) {
 }
 
 function renderCategoryFilters() {
+  categoryFilters.replaceChildren();
   const categories = ["Todos", ...new Set(products.map((product) => product.category))];
 
   categories.forEach((categoryName) => {
@@ -96,8 +97,7 @@ function renderCategoryFilters() {
     button.addEventListener("click", () => {
       activeCategory = categoryName;
       renderCategoryFilters();
-      renderCategoryFilters();
-renderProducts();
+      renderProducts();
     });
 
     categoryFilters.append(button);
@@ -120,4 +120,5 @@ function renderProducts() {
 }
 
 generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Loja ER do DCER Baiano.");
+renderCategoryFilters();
 renderProducts();
