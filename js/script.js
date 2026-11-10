@@ -1,8 +1,19 @@
-// Número temporário para testes. Atualizar antes de publicar a loja.
+// Número temporário para testes. Confirmar com o responsável antes da publicação.
 const WHATSAPP_NUMBER = "5571993766226";
 
-// Cadastre os produtos aqui quando recebermos fotos, nomes e preços.
-const products = [];
+// Produtos confirmados até agora. As imagens são provisórias até adicionarmos as fotos originais.
+const products = [
+  {
+    name: "Botons — Insígnias de postos",
+    price: "R$ 5,00 cada",
+    image: "assets/img/boton-placeholder.svg"
+  },
+  {
+    name: "Pulseira personalizada",
+    price: "R$ 15,00",
+    image: "assets/img/pulseira-placeholder.svg"
+  }
+];
 
 const productGrid = document.querySelector("#product-grid");
 const generalWhatsapp = document.querySelector("#general-whatsapp");
@@ -29,7 +40,7 @@ function createProductCard(product) {
 
   const button = document.createElement("a");
   button.className = "product-button";
-  button.href = createWhatsappLink(`Olá! Tenho interesse no produto: ${product.name}.`);
+  button.href = createWhatsappLink(`Olá! Tenho interesse em ${product.name}.`);
   button.target = "_blank";
   button.rel = "noopener noreferrer";
   button.textContent = "Pedir pelo WhatsApp ↗";
@@ -44,18 +55,6 @@ function createWhatsappLink(message) {
 }
 
 function renderProducts() {
-  if (!products.length) {
-    const emptyState = document.createElement("div");
-    emptyState.className = "empty-state";
-    emptyState.innerHTML = `
-      <div class="empty-icon" aria-hidden="true">✦</div>
-      <h3>Em breve, novidades por aqui!</h3>
-      <p>Estamos preparando nossa vitrine. Os produtos estarão disponíveis em breve.</p>
-    `;
-    productGrid.append(emptyState);
-    return;
-  }
-
   products.forEach((product) => {
     productGrid.append(createProductCard(product));
   });
