@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "5571985032075";
+const WHATSAPP_NUMBER = "5571983982533";
 
 const products = [
   { name: "Panfleto Para Ser Embaixador", category: "Manuais", price: "R$ 0,60 / unidade" },
