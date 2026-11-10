@@ -9,7 +9,11 @@ let products = [];
 let activeCategory = "Todos";
 
 function createWhatsappLink(message) {
-  return `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
+  const text = encodeURIComponent(message);
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  return isAndroid
+    ? `whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${text}`
+    : `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${text}`;
 }
 
 function createProductCard(product) {
@@ -39,8 +43,7 @@ function createProductCard(product) {
   const button = document.createElement("a");
   button.className = "product-button";
   button.href = createWhatsappLink(`Olá! Tenho interesse no produto: ${product.name} (${product.price}). Poderia confirmar a disponibilidade?`);
-  button.target = "_blank";
-  button.rel = "noopener noreferrer";
+  button.target = "_self";
   button.textContent = "Consultar pelo WhatsApp ↗";
   info.append(category, name, price, stock, button);
   card.append(info);
