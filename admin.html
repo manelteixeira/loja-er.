@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1d3a">
+  <title>Administração | Loja ER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/admin.js"></script>
+</head>
+<body class="admin-page">
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="assets/img/logo-dcer.webp" alt="Emblema dos Embaixadores do Rei">
+      <span class="brand-copy"><strong>LOJA ER</strong><small>PAINEL ADMINISTRATIVO</small></span>
+    </a>
+    <a class="header-link" href="index.html">Voltar à loja ↗</a>
+  </header>
+  <main class="admin-main">
+    <section class="login-panel" id="login-panel">
+      <span class="eyebrow"><span class="eyebrow-line"></span> ACESSO RESTRITO</span>
+      <h1>Área do <span>administrador.</span></h1>
+      <p>Entre com a conta autorizada do DCER Baiano para gerenciar a vitrine.</p>
+      <form id="login-form" class="admin-form login-form">
+        <label for="login-email">E-mail</label>
+        <input id="login-email" type="email" autocomplete="username" value="dcerbaiano@gmail.com" required>
+        <label for="login-password">Senha</label>
+        <input id="login-password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+        <button class="admin-submit" type="submit">Entrar no painel</button>
+        <p class="admin-message" id="login-message" role="status"></p>
+      </form>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="admin-heading">
+        <div>
+          <span class="eyebrow"><span class="eyebrow-line"></span> GERENCIAMENTO DA VITRINE</span>
+          <h1>Painel <span>administrativo.</span></h1>
+          <p>Conectado como <strong id="admin-email"></strong></p>
+        </div>
+        <button class="admin-small-button" id="logout-button" type="button">Sair</button>
+      </div>
+
+      <section class="admin-editor">
+        <h2 id="editor-title">Cadastrar produto</h2>
+        <form id="product-form" class="admin-form">
+          <div class="admin-fields">
+            <div class="field-full">
+              <label for="product-name">Nome do produto</label>
+              <input id="product-name" type="text" maxlength="120" required>
+            </div>
+            <div>
+              <label for="product-category">Categoria</label>
+              <input id="product-category" type="text" list="category-options" maxlength="80" placeholder="Ex.: Manuais" required>
+              <datalist id="category-options">
+                <option value="Manuais"></option>
+                <option value="Revistas e livros"></option>
+                <option value="Bíblias"></option>
+                <option value="Bandeiras"></option>
+                <option value="Brindes, vestuário e acessórios"></option>
+              </datalist>
+            </div>
+            <div>
+              <label for="product-price">Preço</label>
+              <input id="product-price" type="text" maxlength="50" placeholder="Ex.: R$ 25,00" required>
+            </div>
+            <div class="field-full">
+              <label for="product-description">Descrição (opcional)</label>
+              <textarea id="product-description" rows="3" maxlength="500" placeholder="Informações adicionais sobre o produto"></textarea>
+            </div>
+            <div class="field-full">
+              <label for="product-image">Foto do produto (JPG, PNG ou WebP · até 5 MB)</label>
+              <input id="product-image" type="file" accept="image/jpeg,image/png,image/webp">
+              <img id="image-preview" class="image-preview" alt="Prévia da imagem selecionada" hidden>
+            </div>
+            <label class="availability-toggle"><input id="product-available" type="checkbox" checked> Produto disponível na vitrine</label>
+          </div>
+          <div class="admin-form-actions">
+            <button class="admin-submit" id="save-product" type="submit">Salvar produto</button>
+            <button class="admin-cancel" id="cancel-edit" type="button">Limpar formulário</button>
+          </div>
+        </form>
+        <p class="admin-message" id="admin-message" role="status"></p>
+      </section>
+
+      <section class="admin-list-section">
+        <h2>Produtos cadastrados</h2>
+        <div id="admin-products" class="admin-products"></div>
+      </section>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <a class="footer-brand" href="index.html">LOJA ER<span>.</span></a>
+    <p>Departamento Convencional de Embaixadores do Rei · Bahia</p>
+    <small>Área administrativa</small>
+  </footer>
+</body>
+</html>
