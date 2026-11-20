@@ -76,9 +76,10 @@
               <textarea id="product-description" rows="3" maxlength="500" placeholder="Informações adicionais sobre o produto"></textarea>
             </div>
             <div class="field-full">
-              <label for="product-image">Foto do produto (JPG, PNG ou WebP · até 5 MB)</label>
-              <input id="product-image" type="file" accept="image/jpeg,image/png,image/webp">
-              <img id="image-preview" class="image-preview" alt="Prévia da imagem selecionada" hidden>
+              <label for="product-image">Fotos do produto (até 5 fotos · JPG, PNG ou WebP · até 5 MB cada)</label>
+              <input id="product-image" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+              <small class="image-help">Na edição, se selecionar novas fotos, elas substituirão as fotos atuais. Se não selecionar nenhuma, as fotos existentes serão mantidas.</small>
+              <div id="image-previews" class="image-previews" aria-live="polite"></div>
             </div>
             <label class="availability-toggle"><input id="product-available" type="checkbox" checked> Produto disponível na vitrine</label>
           </div>
