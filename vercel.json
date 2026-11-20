@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "loja-er.vercel.app"
+        }
+      ],
+      "destination": "https://loja-dcer-baiano.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
+}
