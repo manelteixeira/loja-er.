@@ -136,6 +136,12 @@ async function loadProducts() {
 }
 
 function renderProducts() {
+  categoryFilters.querySelectorAll(".category-filter").forEach((button) => {
+    const isActive = button.textContent === activeCategory;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
   list.replaceChildren();
   const filteredProducts = activeCategory === "Todas"
     ? allProducts
