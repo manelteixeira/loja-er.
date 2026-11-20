@@ -180,3 +180,15 @@ a { color: inherit; text-decoration: none; }
 
 /* Corrige o atributo hidden da prévia da imagem */
 .image-preview[hidden] { display: none; }
+
+
+/* Galeria de fotos dos produtos */
+.product-gallery { width: 100%; background: #eee9dd; }
+.product-gallery .product-image { display: block; }
+.product-thumbnails { display: flex; gap: 7px; padding: 0 10px 10px; overflow-x: auto; }
+.product-thumbnail { width: 48px; height: 48px; flex: 0 0 48px; padding: 2px; border: 1px solid var(--border); background: #fff; cursor: pointer; }
+.product-thumbnail.is-active { border: 2px solid var(--gold); }
+.product-thumbnail img { width: 100%; height: 100%; object-fit: contain; }
+.image-help { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.image-previews { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
+.image-previews img { width: 86px; height: 86px; padding: 4px; object-fit: contain; background: #f5f3ed; border: 1px solid var(--border); }
