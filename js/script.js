@@ -30,18 +30,27 @@ function createProductCard(product) {
   category.textContent = product.category;
   const name = document.createElement("h3");
   name.textContent = product.name;
+  const description = document.createElement("p");
+  description.className = "product-description";
+  description.textContent = product.description || "";
+  description.hidden = !product.description;
   const price = document.createElement("p");
   price.className = "product-price";
   price.textContent = product.price;
   const stock = document.createElement("p");
   stock.className = "product-stock";
-  stock.textContent = product.available ? "Disponibilidade a confirmar" : "Indisponível no momento";
+  const quantity = Number(product.stock ?? 0);
+  stock.textContent = quantity === 0
+    ? "Esgotado"
+    : `${quantity} ${quantity === 1 ? "unidade disponível" : "unidades disponíveis"}`;
   const button = document.createElement("a");
   button.className = "product-button";
   button.href = createWhatsappLink(`Olá! Tenho interesse no produto: ${product.name} (${product.price}). Poderia confirmar a disponibilidade?`);
   button.target = "_self";
   button.textContent = "Consultar pelo WhatsApp ↗";
-  info.append(category, name, price, stock, button);
+  info.append(category, name);
+  if (product.description) info.append(description);
+  info.append(price, stock, button);
   card.append(info);
   return card;
 }
@@ -83,7 +92,7 @@ function renderProducts() {
 
 async function initCatalog() {
   generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Casa do Embaixador do DCER Baiano.");
-  const { data, error } = await supabase.from("products").select("id,name,category,price,description,image_url,available,sort_order").eq("available", true).order("sort_order").order("name");
+  const { data, error } = await supabase.from("products").select("id,name,category,price,description,image_url,available,stock,sort_order").eq("available", true).order("sort_order").order("name");
   if (error) {
     filterStatus.textContent = "Não foi possível carregar os produtos. Tente novamente mais tarde.";
     return;
