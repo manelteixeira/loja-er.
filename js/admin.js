@@ -11,10 +11,10 @@ const dashboard = document.querySelector("#dashboard");
 const loginMessage = document.querySelector("#login-message");
 const adminMessage = document.querySelector("#admin-message");
 const imageInput = document.querySelector("#product-image");
-const imagePreview = document.querySelector("#image-preview");
+const imagePreview = document.querySelector("#image-previews");
 const saveButton = document.querySelector("#save-product");
 let editingId = null;
-let currentImageUrl = null;
+let currentImageUrls = [];
 let allProducts = [];
 let activeCategory = "Todas";
 
@@ -71,10 +71,9 @@ document.querySelector("#logout-button").addEventListener("click", async () => {
 
 function resetEditor() {
   editingId = null;
-  currentImageUrl = null;
+  currentImageUrls = [];
   form.reset();
-  imagePreview.hidden = true;
-  imagePreview.removeAttribute("src");
+  imagePreview.replaceChildren();
   document.querySelector("#editor-title").textContent = "Cadastrar produto";
   document.querySelector("#save-product").textContent = "Salvar produto";
 }
@@ -82,16 +81,33 @@ function resetEditor() {
 document.querySelector("#cancel-edit").addEventListener("click", resetEditor);
 
 imageInput.addEventListener("change", () => {
-  const file = imageInput.files?.[0];
-  if (!file) return;
-  if (!file.type.startsWith("image/")) {
-    message(adminMessage, "Escolha um arquivo de imagem.", true);
+  const files = Array.from(imageInput.files || []);
+  if (files.length > 5) {
+    message(adminMessage, "Selecione no máximo 5 fotos por produto.", true);
     imageInput.value = "";
+    renderImagePreviews(currentImageUrls);
     return;
   }
-  imagePreview.src = URL.createObjectURL(file);
-  imagePreview.hidden = false;
+  const invalidFile = files.find((file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024);
+  if (invalidFile) {
+    message(adminMessage, "Use fotos JPG, PNG ou WebP de até 5 MB cada.", true);
+    imageInput.value = "";
+    renderImagePreviews(currentImageUrls);
+    return;
+  }
+  renderImagePreviews(files.map((file) => URL.createObjectURL(file)));
+  message(adminMessage, files.length ? `${files.length} foto(s) selecionada(s). Ao salvar, elas substituirão as fotos atuais.` : "");
 });
+
+function renderImagePreviews(sources) {
+  imagePreview.replaceChildren();
+  sources.forEach((source, index) => {
+    const image = document.createElement("img");
+    image.src = source;
+    image.alt = `Foto ${index + 1} do produto`;
+    imagePreview.append(image);
+  });
+}
 
 async function uploadImage(file) {
   const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
@@ -159,9 +175,10 @@ function renderProducts() {
   filteredProducts.forEach((product) => {
     const item = document.createElement("article");
     item.className = "admin-product";
-    if (product.image_url) {
+    const thumbnailUrl = product.image_urls?.[0] || product.image_url;
+    if (thumbnailUrl) {
       const image = document.createElement("img");
-      image.src = product.image_url;
+      image.src = thumbnailUrl;
       image.alt = "";
       item.append(image);
     }
@@ -191,7 +208,7 @@ function renderProducts() {
 }
 function editProduct(product) {
   editingId = product.id;
-  currentImageUrl = product.image_url;
+  currentImageUrls = product.image_urls?.length ? product.image_urls : (product.image_url ? [product.image_url] : []);
   document.querySelector("#product-name").value = product.name;
   document.querySelector("#product-category").value = product.category;
   document.querySelector("#product-price").value = product.price;
@@ -199,12 +216,7 @@ function editProduct(product) {
   document.querySelector("#product-description").value = product.description || "";
   document.querySelector("#product-available").checked = product.available;
   imageInput.value = "";
-  if (currentImageUrl) {
-    imagePreview.src = currentImageUrl;
-    imagePreview.hidden = false;
-  } else {
-    imagePreview.hidden = true;
-  }
+  renderImagePreviews(currentImageUrls);
   document.querySelector("#editor-title").textContent = "Editar produto";
   document.querySelector("#save-product").textContent = "Salvar alterações";
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -222,15 +234,17 @@ form.addEventListener("submit", async (event) => {
   save.disabled = true;
   message(adminMessage, "Salvando produto...");
   try {
-    const file = imageInput.files?.[0];
-    const imageUrl = file ? await uploadImage(file) : currentImageUrl;
+    const files = Array.from(imageInput.files || []);
+    const imageUrls = files.length ? await Promise.all(files.map(uploadImage)) : currentImageUrls;
+    if (imageUrls.length > 5) throw new Error("Um produto pode ter no máximo 5 fotos.");
     const payload = {
       name: document.querySelector("#product-name").value.trim(),
       category: document.querySelector("#product-category").value.trim(),
       price: document.querySelector("#product-price").value.trim(),
       stock: Math.max(0, Number.parseInt(document.querySelector("#product-stock").value, 10) || 0),
       description: document.querySelector("#product-description").value.trim() || null,
-      image_url: imageUrl,
+      image_url: imageUrls[0] || null,
+      image_urls: imageUrls,
       available: document.querySelector("#product-available").checked
     };
     const result = editingId
