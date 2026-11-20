@@ -164,7 +164,7 @@ function renderProducts() {
     const name = document.createElement("strong");
     name.textContent = product.name;
     const meta = document.createElement("span");
-    meta.textContent = `${product.category} · ${product.price} · ${product.available ? "Disponível" : "Oculto"}`;
+    meta.textContent = `${product.category} · ${product.price} · Estoque: ${product.stock ?? 0} · ${product.available ? "Disponível" : "Oculto"}`;
     details.append(name, meta);
     const actions = document.createElement("div");
     actions.className = "admin-product-actions";
@@ -189,6 +189,7 @@ function editProduct(product) {
   document.querySelector("#product-name").value = product.name;
   document.querySelector("#product-category").value = product.category;
   document.querySelector("#product-price").value = product.price;
+  document.querySelector("#product-stock").value = product.stock ?? 0;
   document.querySelector("#product-description").value = product.description || "";
   document.querySelector("#product-available").checked = product.available;
   imageInput.value = "";
@@ -221,6 +222,7 @@ form.addEventListener("submit", async (event) => {
       name: document.querySelector("#product-name").value.trim(),
       category: document.querySelector("#product-category").value.trim(),
       price: document.querySelector("#product-price").value.trim(),
+      stock: Math.max(0, Number.parseInt(document.querySelector("#product-stock").value, 10) || 0),
       description: document.querySelector("#product-description").value.trim() || null,
       image_url: imageUrl,
       available: document.querySelector("#product-available").checked
