@@ -15,13 +15,43 @@ function createWhatsappLink(message) {
 function createProductCard(product) {
   const card = document.createElement("article");
   card.className = "product-card";
-  if (product.image_url) {
+  const imageUrls = product.image_urls?.length ? product.image_urls : (product.image_url ? [product.image_url] : []);
+  if (imageUrls.length) {
+    const gallery = document.createElement("div");
+    gallery.className = "product-gallery";
     const image = document.createElement("img");
     image.className = "product-image";
-    image.src = product.image_url;
+    image.src = imageUrls[0];
     image.alt = product.name;
     image.loading = "lazy";
-    card.append(image);
+    gallery.append(image);
+
+    if (imageUrls.length > 1) {
+      const thumbnails = document.createElement("div");
+      thumbnails.className = "product-thumbnails";
+      imageUrls.forEach((url, index) => {
+        const thumbnail = document.createElement("button");
+        thumbnail.type = "button";
+        thumbnail.className = "product-thumbnail";
+        thumbnail.setAttribute("aria-label", `Ver foto ${index + 1} de ${imageUrls.length}`);
+        thumbnail.setAttribute("aria-pressed", String(index === 0));
+        const thumbnailImage = document.createElement("img");
+        thumbnailImage.src = url;
+        thumbnailImage.alt = "";
+        thumbnail.append(thumbnailImage);
+        thumbnail.addEventListener("click", () => {
+          image.src = url;
+          thumbnails.querySelectorAll(".product-thumbnail").forEach((button, buttonIndex) => {
+            button.classList.toggle("is-active", buttonIndex === index);
+            button.setAttribute("aria-pressed", String(buttonIndex === index));
+          });
+        });
+        if (index === 0) thumbnail.classList.add("is-active");
+        thumbnails.append(thumbnail);
+      });
+      gallery.append(thumbnails);
+    }
+    card.append(gallery);
   }
   const info = document.createElement("div");
   info.className = "product-info";
@@ -92,7 +122,7 @@ function renderProducts() {
 
 async function initCatalog() {
   generalWhatsapp.href = createWhatsappLink("Olá! Gostaria de saber mais sobre os produtos da Casa do Embaixador do DCER Baiano.");
-  const { data, error } = await supabase.from("products").select("id,name,category,price,description,image_url,available,stock,sort_order").eq("available", true).order("sort_order").order("name");
+  const { data, error } = await supabase.from("products").select("id,name,category,price,description,image_url,image_urls,available,stock,sort_order").eq("available", true).order("sort_order").order("name");
   if (error) {
     filterStatus.textContent = "Não foi possível carregar os produtos. Tente novamente mais tarde.";
     return;
